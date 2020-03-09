@@ -21,6 +21,9 @@ public class IPLAnalyzer {
         this.sortMap = new HashMap<>();
         this.sortMap.put(SortField.AVG, Comparator.comparing(stat -> stat.average));
         this.sortMap.put(SortField.STRIKING_RATE, Comparator.comparing(stat -> stat.strikeRate));
+        this.sortMap.put(SortField.FOUR, Comparator.comparing(stat -> stat.numOfFour));
+        this.sortMap.put(SortField.SIX, Comparator.comparing(stat -> stat.numOfSix));
+        this.sortMap.put(SortField.FOUR_AND_SIX, Comparator.comparing(stat -> (stat.numOfSix + stat.numOfFour)));
     }
 
     public int loadIPLBatsmenData(String csvFilePath) {
