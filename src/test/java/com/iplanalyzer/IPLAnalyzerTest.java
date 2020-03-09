@@ -63,10 +63,24 @@ public class IPLAnalyzerTest {
             iplAnalyzer.loadIPLBatsmenData(IPL_BATSMAN_CSV_FILE_PATH);
             String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.FOUR_AND_SIX);
             IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
-            Assert.assertEquals(83, censusCSV[0].numOfFour+censusCSV[0].numOfSix);
+            Assert.assertEquals(83, censusCSV[0].numOfFour + censusCSV[0].numOfSix);
         } catch (StatAnalyzerException e) {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void givenIPLBatsman_WhenSortedOnFourAndSix_ShouldReturnStrikeRateResult() {
+        try {
+            IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
+            iplAnalyzer.loadIPLBatsmenData(IPL_BATSMAN_CSV_FILE_PATH);
+            String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.FOUR_AND_SIX);
+            IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
+            Assert.assertEquals(204.81, censusCSV[0].strikeRate,0.0);
+        } catch (StatAnalyzerException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
