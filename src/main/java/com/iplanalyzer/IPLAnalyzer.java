@@ -28,11 +28,22 @@ public class IPLAnalyzer {
 
     public int loadIPLBatsmenData(String csvFilePath) {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
-
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
-
             Iterator<IPLBatsmanCSV> csvIterator = icsvBuilder.getCSVFileIterator(reader, IPLBatsmanCSV.class);
             Iterable<IPLBatsmanCSV> csvIterable = () -> csvIterator;
+            StreamSupport.stream(csvIterable.spliterator(), false).
+                    forEach(csvStat -> statMap.put(csvStat.player, new IPLDTO(csvStat)));
+            return statMap.size();
+        } catch (IOException e) {
+            throw new StatAnalyzerException(e.getMessage(), StatAnalyzerException.ExceptionType.STAT_FILE_PROBLEM);
+        }
+    }
+
+    public int loadIPLBowlerData(String csvFilePath) {
+        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
+            ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
+            Iterator<IPLBowlerCSV> csvIterator = icsvBuilder.getCSVFileIterator(reader, IPLBowlerCSV.class);
+            Iterable<IPLBowlerCSV> csvIterable = () -> csvIterator;
             StreamSupport.stream(csvIterable.spliterator(), false).
                     forEach(csvStat -> statMap.put(csvStat.player, new IPLDTO(csvStat)));
             return statMap.size();

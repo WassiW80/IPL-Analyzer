@@ -10,6 +10,7 @@ public class IPLAnalyzerTest {
 
     public static final String IPL_BATSMAN_CSV_FILE_PATH = "./src/test/resources/IPL2019FactsheetMostRuns.csv";
     private static final String WRONG_CSV_FILE_PATH = "./src/main/resources/IPL2019FactsheetMostRuns.csv";
+    private static final String IPL_BOWLER_CSV_FILE_PATH = "./src/test/resources/IPL2019FactsheetMostWkts.csv";
 
     @Test
     public void givenIPLBatsmanCSVFileReturnCorrectRecords() {
@@ -107,4 +108,27 @@ public class IPLAnalyzerTest {
             e.printStackTrace();
         }
     }
+
+    //Test cases for Bowling Stat Files
+    @Test
+    public void givenIPLBowlerCSVFileReturnCorrectRecords() {
+        IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
+        int numOfEnteries = iplAnalyzer.loadIPLBowlerData(IPL_BOWLER_CSV_FILE_PATH);
+        Assert.assertEquals(99, numOfEnteries);
+    }
+
+    @Test
+    public void givenIPLBowlerCSVData_WithWrongFile_ShouldThrowException() {
+        try {
+            IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
+            ExpectedException exceptionRule = ExpectedException.none();
+            exceptionRule.expect(StatAnalyzerException.class);
+            iplAnalyzer.loadIPLBowlerData(WRONG_CSV_FILE_PATH);
+        } catch (StatAnalyzerException e) {
+            Assert.assertEquals(StatAnalyzerException.ExceptionType.STAT_FILE_PROBLEM, e.type);
+        }
+    }
+
+
+
 }
