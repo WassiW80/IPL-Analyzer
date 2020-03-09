@@ -83,7 +83,7 @@ public class IPLAnalyzerTest {
     }
 
     @Test
-    public void givenIPLBatsman_WhenSortedOnStrikeRate_ShouldReturnAverageResult() {
+    public void givenIPLBatsman_WhenSortedOnAverage_ShouldReturnStrikeRateResult() {
         try {
             IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
             iplAnalyzer.loadIPLBatsmenData(IPL_BATSMAN_CSV_FILE_PATH);
@@ -95,4 +95,16 @@ public class IPLAnalyzerTest {
         }
     }
 
+    @Test
+    public void givenIPLBatsman_WhenSortedOnAverage_ShouldReturnRunResult() {
+        try {
+            IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
+            iplAnalyzer.loadIPLBatsmenData(IPL_BATSMAN_CSV_FILE_PATH);
+            String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.AVG);
+            IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
+            Assert.assertEquals(416, censusCSV[0].runs);
+        } catch (StatAnalyzerException e) {
+            e.printStackTrace();
+        }
+    }
 }
