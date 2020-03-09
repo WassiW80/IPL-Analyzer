@@ -42,4 +42,17 @@ public class IPLAnalyzerTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void givenIPLBatsman_WhenSortedOnStrikingRates_ShouldReturnSortedResult() {
+        try {
+            IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
+            iplAnalyzer.loadIPLBatsmenData(IPL_BATSMAN_CSV_FILE_PATH);
+            String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.STRIKING_RATE);
+            IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
+            Assert.assertEquals(333.33, censusCSV[0].strikeRate, 0.0);
+        } catch (StatAnalyzerException e) {
+            e.printStackTrace();
+        }
+    }
 }

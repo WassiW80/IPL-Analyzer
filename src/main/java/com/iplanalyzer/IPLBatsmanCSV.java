@@ -1,6 +1,7 @@
 package com.iplanalyzer;
 
 import com.opencsv.bean.CsvBindByName;
+
 public class IPLBatsmanCSV {
     @CsvBindByName(column = "PLAYER", required = true)
     public String player;

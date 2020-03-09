@@ -20,6 +20,7 @@ public class IPLAnalyzer {
     public IPLAnalyzer() {
         this.sortMap = new HashMap<>();
         this.sortMap.put(SortField.AVG, Comparator.comparing(stat -> stat.average));
+        this.sortMap.put(SortField.STRIKING_RATE, Comparator.comparing(stat -> stat.strikeRate));
     }
 
     public int loadIPLBatsmenData(String csvFilePath) {
@@ -31,7 +32,6 @@ public class IPLAnalyzer {
             Iterable<IPLBatsmanCSV> csvIterable = () -> csvIterator;
             StreamSupport.stream(csvIterable.spliterator(), false).
                     forEach(csvStat -> statMap.put(csvStat.player, new IPLDTO(csvStat)));
-            System.out.println(statMap);
             return statMap.size();
         } catch (IOException e) {
             throw new StatAnalyzerException(e.getMessage(), StatAnalyzerException.ExceptionType.STAT_FILE_PROBLEM);
