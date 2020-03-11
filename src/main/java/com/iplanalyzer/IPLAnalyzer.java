@@ -1,16 +1,12 @@
 package com.iplanalyzer;
 
-import census.CSVBuilderFactory;
-import census.ICSVBuilder;
 import com.google.gson.Gson;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class IPLAnalyzer {
     Map<SortField, Comparator<IPLDTO>> sortMap;
@@ -27,39 +23,22 @@ public class IPLAnalyzer {
     }
 
     public int loadIPLBatsmenData(String csvFilePath) {
-        return loadIPLData(IPLBatsmanCSV.class, csvFilePath);
+        statMap = IPLAdaptor.loadIPLData(IPLBatsmanCSV.class, csvFilePath);
+        return statMap.size();
     }
 
-    private <E> int loadIPLData(Class<E> iplClass, String csvFilePath) {
-        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
-            ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<E> csvIterator = icsvBuilder.getCSVFileIterator(reader, iplClass);
-            Iterable<E> csvIterable = () -> csvIterator;
-            if (iplClass.getName() == "com.iplanalyzer.IPLBatsmanCSV") {
-                StreamSupport.stream(csvIterable.spliterator(), false).
-                        map(IPLBatsmanCSV.class::cast).
-                        forEach(csvStat -> statMap.put(csvStat.player, new IPLDTO(csvStat)));
-            } else if (iplClass.getName() == "com.iplanalyzer.IPLBowlerCSV") {
-                StreamSupport.stream(csvIterable.spliterator(), false).
-                        map(IPLBowlerCSV.class::cast).
-                        forEach(csvStat -> statMap.put(csvStat.player, new IPLDTO(csvStat)));
-            }
-            return statMap.size();
-        } catch (IOException e) {
-            throw new StatAnalyzerException(e.getMessage(), StatAnalyzerException.ExceptionType.STAT_FILE_PROBLEM);
-        }
-    }
 
     public int loadIPLBowlerData(String csvFilePath) {
-        return loadIPLData(IPLBowlerCSV.class, csvFilePath);
+        statMap = IPLAdaptor.loadIPLData(IPLBowlerCSV.class, csvFilePath);
+        return statMap.size();
     }
 
     public String getStatWiseSortedData(SortField sortField) {
-        if (statMap == null || statMap.size() == 0) {
+        collect = statMap.values().stream().collect(Collectors.toList());
+        if (collect == null || collect.size() == 0) {
             throw new StatAnalyzerException("No Census Data",
                     StatAnalyzerException.ExceptionType.NO_STAT_DATA);
         }
-        collect = statMap.values().stream().collect(Collectors.toList());
         this.sort(this.sortMap.get(sortField).reversed());
         String sortedStateCensusJson = new Gson().toJson(collect);
         return sortedStateCensusJson;
