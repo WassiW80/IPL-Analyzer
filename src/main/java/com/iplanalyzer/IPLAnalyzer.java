@@ -27,12 +27,23 @@ public class IPLAnalyzer {
     }
 
     public int loadIPLBatsmenData(String csvFilePath) {
+        return loadIPLData(IPLBatsmanCSV.class, csvFilePath);
+    }
+
+    private <E> int loadIPLData(Class<E> iplClass, String csvFilePath) {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<IPLBatsmanCSV> csvIterator = icsvBuilder.getCSVFileIterator(reader, IPLBatsmanCSV.class);
-            Iterable<IPLBatsmanCSV> csvIterable = () -> csvIterator;
-            StreamSupport.stream(csvIterable.spliterator(), false).
-                    forEach(csvStat -> statMap.put(csvStat.player, new IPLDTO(csvStat)));
+            Iterator<E> csvIterator = icsvBuilder.getCSVFileIterator(reader, iplClass);
+            Iterable<E> csvIterable = () -> csvIterator;
+            if (iplClass.getName() == "com.iplanalyzer.IPLBatsmanCSV") {
+                StreamSupport.stream(csvIterable.spliterator(), false).
+                        map(IPLBatsmanCSV.class::cast).
+                        forEach(csvStat -> statMap.put(csvStat.player, new IPLDTO(csvStat)));
+            } else if (iplClass.getName() == "com.iplanalyzer.IPLBowlerCSV") {
+                StreamSupport.stream(csvIterable.spliterator(), false).
+                        map(IPLBowlerCSV.class::cast).
+                        forEach(csvStat -> statMap.put(csvStat.player, new IPLDTO(csvStat)));
+            }
             return statMap.size();
         } catch (IOException e) {
             throw new StatAnalyzerException(e.getMessage(), StatAnalyzerException.ExceptionType.STAT_FILE_PROBLEM);
@@ -40,18 +51,7 @@ public class IPLAnalyzer {
     }
 
     public int loadIPLBowlerData(String csvFilePath) {
-        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
-            ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<IPLBowlerCSV> csvIterator = icsvBuilder.getCSVFileIterator(reader, IPLBowlerCSV.class);
-            Iterable<IPLBowlerCSV> csvIterable = () -> csvIterator;
-            StreamSupport.stream(csvIterable.spliterator(), false).
-                    forEach(csvStat -> statMap.put(csvStat.player, new IPLDTO(csvStat)));
-            return statMap.size();
-        } catch (IOException e) {
-            throw new StatAnalyzerException(e.getMessage(), StatAnalyzerException.ExceptionType.STAT_FILE_PROBLEM);
-        }
-
-
+        return loadIPLData(IPLBowlerCSV.class, csvFilePath);
     }
 
     public String getStatWiseSortedData(SortField sortField) {

@@ -128,7 +128,4 @@ public class IPLAnalyzerTest {
             Assert.assertEquals(StatAnalyzerException.ExceptionType.STAT_FILE_PROBLEM, e.type);
         }
     }
-
-
-
 }
