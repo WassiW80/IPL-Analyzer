@@ -9,6 +9,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class IPLAnalyzer {
+    public enum Stat{
+        BOWLER, BATSMAN
+    }
+
     Map<SortField, Comparator<IPLDTO>> sortMap;
     Map<String, IPLDTO> statMap = new HashMap<>();
     List<IPLDTO> collect;
@@ -22,14 +26,8 @@ public class IPLAnalyzer {
         this.sortMap.put(SortField.FOUR_AND_SIX, Comparator.comparing(stat -> (stat.numOfSix + stat.numOfFour)));
     }
 
-    public int loadIPLBatsmenData(String csvFilePath) {
-        statMap = IPLAdaptor.loadIPLData(IPLBatsmanCSV.class, csvFilePath);
-        return statMap.size();
-    }
-
-
-    public int loadIPLBowlerData(String csvFilePath) {
-        statMap = IPLAdaptor.loadIPLData(IPLBowlerCSV.class, csvFilePath);
+    public int loadIPLData(Stat stat,String csvFilePath) {
+        statMap = IPLLoader.loadIPLData(stat, csvFilePath);
         return statMap.size();
     }
 

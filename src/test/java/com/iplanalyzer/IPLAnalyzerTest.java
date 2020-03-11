@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.Base64;
+
 public class IPLAnalyzerTest {
 
 
@@ -15,7 +17,7 @@ public class IPLAnalyzerTest {
     @Test
     public void givenIPLBatsmanCSVFileReturnCorrectRecords() {
         IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
-        int numOfEnteries = iplAnalyzer.loadIPLBatsmenData(IPL_BATSMAN_CSV_FILE_PATH);
+        int numOfEnteries = iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BATSMAN,IPL_BATSMAN_CSV_FILE_PATH);
         Assert.assertEquals(100, numOfEnteries);
     }
 
@@ -25,7 +27,7 @@ public class IPLAnalyzerTest {
             IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
             ExpectedException exceptionRule = ExpectedException.none();
             exceptionRule.expect(StatAnalyzerException.class);
-            iplAnalyzer.loadIPLBatsmenData(WRONG_CSV_FILE_PATH);
+            iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BATSMAN,WRONG_CSV_FILE_PATH);
         } catch (StatAnalyzerException e) {
             Assert.assertEquals(StatAnalyzerException.ExceptionType.STAT_FILE_PROBLEM, e.type);
         }
@@ -35,7 +37,7 @@ public class IPLAnalyzerTest {
     public void givenIPLBatsman_WhenSortedOnAverage_ShouldReturnSortedResult() {
         try {
             IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
-            iplAnalyzer.loadIPLBatsmenData(IPL_BATSMAN_CSV_FILE_PATH);
+            iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BATSMAN,IPL_BATSMAN_CSV_FILE_PATH);
             String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.AVG);
             IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
             Assert.assertEquals(83.2, censusCSV[0].average, 0.0);
@@ -48,7 +50,7 @@ public class IPLAnalyzerTest {
     public void givenIPLBatsman_WhenSortedOnStrikingRates_ShouldReturnSortedResult() {
         try {
             IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
-            iplAnalyzer.loadIPLBatsmenData(IPL_BATSMAN_CSV_FILE_PATH);
+            iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BATSMAN,IPL_BATSMAN_CSV_FILE_PATH);
             String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.STRIKING_RATE);
             IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
             Assert.assertEquals(333.33, censusCSV[0].strikeRate, 0.0);
@@ -61,7 +63,7 @@ public class IPLAnalyzerTest {
     public void givenIPLBatsman_WhenSortedOnFourAndSix_ShouldReturnSortedResult() {
         try {
             IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
-            iplAnalyzer.loadIPLBatsmenData(IPL_BATSMAN_CSV_FILE_PATH);
+            iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BATSMAN,IPL_BATSMAN_CSV_FILE_PATH);
             String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.FOUR_AND_SIX);
             IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
             Assert.assertEquals(83, censusCSV[0].numOfFour + censusCSV[0].numOfSix);
@@ -74,7 +76,7 @@ public class IPLAnalyzerTest {
     public void givenIPLBatsman_WhenSortedOnFourAndSix_ShouldReturnStrikeRateResult() {
         try {
             IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
-            iplAnalyzer.loadIPLBatsmenData(IPL_BATSMAN_CSV_FILE_PATH);
+            iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BATSMAN,IPL_BATSMAN_CSV_FILE_PATH);
             String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.FOUR_AND_SIX);
             IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
             Assert.assertEquals(204.81, censusCSV[0].strikeRate, 0.0);
@@ -87,7 +89,7 @@ public class IPLAnalyzerTest {
     public void givenIPLBatsman_WhenSortedOnAverage_ShouldReturnStrikeRateResult() {
         try {
             IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
-            iplAnalyzer.loadIPLBatsmenData(IPL_BATSMAN_CSV_FILE_PATH);
+            iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BATSMAN,IPL_BATSMAN_CSV_FILE_PATH);
             String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.AVG);
             IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
             Assert.assertEquals(134.62, censusCSV[0].strikeRate, 0.0);
@@ -100,7 +102,7 @@ public class IPLAnalyzerTest {
     public void givenIPLBatsman_WhenSortedOnAverage_ShouldReturnRunResult() {
         try {
             IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
-            iplAnalyzer.loadIPLBatsmenData(IPL_BATSMAN_CSV_FILE_PATH);
+            iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BATSMAN,IPL_BATSMAN_CSV_FILE_PATH);
             String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.AVG);
             IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
             Assert.assertEquals(416, censusCSV[0].runs);
@@ -113,7 +115,7 @@ public class IPLAnalyzerTest {
     @Test
     public void givenIPLBowlerCSVFileReturnCorrectRecords() {
         IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
-        int numOfEnteries = iplAnalyzer.loadIPLBowlerData(IPL_BOWLER_CSV_FILE_PATH);
+        int numOfEnteries = iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BOWLER,IPL_BOWLER_CSV_FILE_PATH);
         Assert.assertEquals(99, numOfEnteries);
     }
 
@@ -123,7 +125,7 @@ public class IPLAnalyzerTest {
             IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
             ExpectedException exceptionRule = ExpectedException.none();
             exceptionRule.expect(StatAnalyzerException.class);
-            iplAnalyzer.loadIPLBowlerData(WRONG_CSV_FILE_PATH);
+            iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BOWLER,WRONG_CSV_FILE_PATH);
         } catch (StatAnalyzerException e) {
             Assert.assertEquals(StatAnalyzerException.ExceptionType.STAT_FILE_PROBLEM, e.type);
         }
