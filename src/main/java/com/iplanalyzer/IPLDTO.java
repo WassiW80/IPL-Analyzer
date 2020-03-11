@@ -11,6 +11,7 @@ public class IPLDTO {
     public double strikeRate;
     public double average;
     public double economy;
+    public int wicket;
 
     public IPLDTO(IPLBatsmanCSV csvStat) {
         player = csvStat.player;
@@ -29,5 +30,6 @@ public class IPLDTO {
         economy = csvStat.economy;
         fiveWicket = csvStat.fiveWicket;
         fourWicket = csvStat.fourWicket;
+        wicket = csvStat.wicket;
     }
 }

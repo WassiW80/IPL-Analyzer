@@ -194,4 +194,18 @@ public class IPLAnalyzerTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void givenIPLBowler_WhenSortedOnMaximumWicketWithBestAverage_ShouldReturnStrikeRate() {
+        try {
+            IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
+            iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BOWLER, IPL_BOWLER_CSV_FILE_PATH);
+            String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.WICKET);
+            IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
+            Assert.assertEquals("Imran Tahir", censusCSV[0].player);
+        } catch (StatAnalyzerException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

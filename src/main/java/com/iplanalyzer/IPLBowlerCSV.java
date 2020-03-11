@@ -22,4 +22,6 @@ public class IPLBowlerCSV {
     @CsvBindByName(column = "4w", required = true)
     public int fourWicket;
 
+    @CsvBindByName(column = "Wkts", required = true)
+    public int wicket;
 }
