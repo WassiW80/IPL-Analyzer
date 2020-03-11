@@ -8,6 +8,7 @@ public class IPLDTO {
     public int numOfSix;
     public double strikeRate;
     public int runs;
+    public double economy;
 
     public IPLDTO(IPLBatsmanCSV csvStat) {
         player = csvStat.player;
@@ -23,5 +24,6 @@ public class IPLDTO {
         player = csvStat.player;
         average = csvStat.average;
         strikeRate = csvStat.strikeRate;
+        economy = csvStat.economy;
     }
 }
