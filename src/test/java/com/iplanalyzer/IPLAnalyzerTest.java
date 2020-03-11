@@ -167,4 +167,18 @@ public class IPLAnalyzerTest {
             e.printStackTrace();
         }
     }
+
+
+    @Test
+    public void givenIPLBowler_WhenSortedOn5wAnd4w_ShouldReturnSortedResult() {
+        try {
+            IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
+            iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BOWLER, IPL_BOWLER_CSV_FILE_PATH);
+            String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.FIVE_AND_FOUR_WICKET);
+            IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
+            Assert.assertEquals("Lasith Malinga", censusCSV[0].player);
+        } catch (StatAnalyzerException e) {
+            e.printStackTrace();
+        }
+    }
 }

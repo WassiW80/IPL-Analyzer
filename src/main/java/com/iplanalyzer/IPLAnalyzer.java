@@ -25,6 +25,7 @@ public class IPLAnalyzer {
         this.sortMap.put(SortField.SIX, Comparator.comparing(stat -> stat.numOfSix));
         this.sortMap.put(SortField.FOUR_AND_SIX, Comparator.comparing(stat -> (stat.numOfSix + stat.numOfFour)));
         this.sortMap.put(SortField.ECONOMY, Comparator.comparing(stat -> stat.economy));
+        this.sortMap.put(SortField.FIVE_AND_FOUR_WICKET, Comparator.comparing(stat -> (stat.fiveWicket + stat.fourWicket)));
     }
 
     public int loadIPLData(Stat stat, String csvFilePath) {

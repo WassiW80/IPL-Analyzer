@@ -15,4 +15,11 @@ public class IPLBowlerCSV {
 
     @CsvBindByName(column = "Econ", required = true)
     public double economy;
+
+    @CsvBindByName(column = "5w", required = true)
+    public int fiveWicket;
+
+    @CsvBindByName(column = "4w", required = true)
+    public int fourWicket;
+
 }
