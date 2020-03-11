@@ -12,18 +12,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.StreamSupport;
 
-public class IPLLoader {
+public abstract class IPLAdaptor {
+    public abstract Map<String, IPLDTO> loadIPLData(String csvFilePath);
 
-    public static <E> Map<String, IPLDTO> loadIPLData(IPLAnalyzer.Stat stat, String csvFilePath) {
-        if (stat.equals(IPLAnalyzer.Stat.BATSMAN))
-            return loadIPLData(IPLBatsmanCSV.class,csvFilePath);
-        if (stat.equals(IPLAnalyzer.Stat.BOWLER))
-            return loadIPLData(IPLBowlerCSV.class,csvFilePath);
-        else
-            throw new StatAnalyzerException("Invalid stat type", StatAnalyzerException.ExceptionType.INVALID_STAT_TYPE);
-    }
-
-        private static <E> Map<String, IPLDTO> loadIPLData(Class<E> iplClass, String csvFilePath) {
+    public static <E> Map<String, IPLDTO> loadIPLData(Class<E> iplClass, String csvFilePath) {
         Map<String, IPLDTO> statMap = new HashMap<>();
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();

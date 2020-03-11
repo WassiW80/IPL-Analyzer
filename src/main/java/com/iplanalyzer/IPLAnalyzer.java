@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class IPLAnalyzer {
-    public enum Stat{
+    public enum Stat {
         BOWLER, BATSMAN
     }
 
@@ -26,8 +26,8 @@ public class IPLAnalyzer {
         this.sortMap.put(SortField.FOUR_AND_SIX, Comparator.comparing(stat -> (stat.numOfSix + stat.numOfFour)));
     }
 
-    public int loadIPLData(Stat stat,String csvFilePath) {
-        statMap = IPLLoader.loadIPLData(stat, csvFilePath);
+    public int loadIPLData(Stat stat, String csvFilePath) {
+        statMap = new IPLAdaptorFactory().getIPLAdaptor(stat, csvFilePath);
         return statMap.size();
     }
 
