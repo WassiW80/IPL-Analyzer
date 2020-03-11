@@ -22,5 +22,6 @@ public class IPLDTO {
     public IPLDTO(IPLBowlerCSV csvStat) {
         player = csvStat.player;
         average = csvStat.average;
+        strikeRate = csvStat.strikeRate;
     }
 }
