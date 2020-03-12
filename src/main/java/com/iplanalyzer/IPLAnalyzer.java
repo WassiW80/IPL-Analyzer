@@ -27,9 +27,11 @@ public class IPLAnalyzer {
         this.sortMap.put(SortField.ECONOMY, Comparator.comparing(stat -> stat.economy));
         this.sortMap.put(SortField.FIVE_AND_FOUR_WICKET, Comparator.comparing(stat -> (stat.fiveWicket + stat.fourWicket)));
         this.sortMap.put(SortField.WICKET, Comparator.comparing(stat -> stat.wicket));
+        this.sortMap.put(SortField.BEST_BATTING_BOWLING_AVERAGE, new CompareAverage());
+        this.sortMap.put(SortField.RUN, Comparator.comparing(stat -> stat.runs));
     }
 
-    public int loadIPLData(Stat stat, String csvFilePath) {
+    public int loadIPLData(Stat stat, String... csvFilePath) {
         statMap = new IPLAdaptorFactory().getIPLAdaptor(stat, csvFilePath);
         return statMap.size();
     }

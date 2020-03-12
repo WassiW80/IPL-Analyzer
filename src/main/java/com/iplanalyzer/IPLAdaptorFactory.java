@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class IPLAdaptorFactory {
 
-    public <E> Map<String, IPLDTO> getIPLAdaptor(IPLAnalyzer.Stat stat, String csvFilePath) {
+    public <E> Map<String, IPLDTO> getIPLAdaptor(IPLAnalyzer.Stat stat, String... csvFilePath) {
         if (stat.equals(IPLAnalyzer.Stat.BATSMAN))
             return new IPLBatsmanLoader().loadIPLData(csvFilePath);
         if (stat.equals(IPLAnalyzer.Stat.BOWLER))

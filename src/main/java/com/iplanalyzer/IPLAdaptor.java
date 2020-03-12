@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.stream.StreamSupport;
 
 public abstract class IPLAdaptor {
-    public abstract Map<String, IPLDTO> loadIPLData(String csvFilePath);
+    public abstract Map<String, IPLDTO> loadIPLData(String... csvFilePath);
 
     public static <E> Map<String, IPLDTO> loadIPLData(Class<E> iplClass, String csvFilePath) {
         Map<String, IPLDTO> statMap = new HashMap<>();

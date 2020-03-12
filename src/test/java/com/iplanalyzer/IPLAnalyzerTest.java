@@ -101,9 +101,9 @@ public class IPLAnalyzerTest {
         try {
             IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
             iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BATSMAN, IPL_BATSMAN_CSV_FILE_PATH);
-            String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.AVG);
+            String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.RUN);
             IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
-            Assert.assertEquals("MS Dhoni", censusCSV[0].player);
+            Assert.assertEquals("David Warner", censusCSV[0].player);
         } catch (StatAnalyzerException e) {
             e.printStackTrace();
         }
@@ -208,4 +208,16 @@ public class IPLAnalyzerTest {
         }
     }
 
+    @Test
+    public void givenIPLBowler_WhenSortedOnBestBattingBowlingAverage_ShouldReturnSortedData() {
+        try {
+            IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
+            iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BATSMAN,IPL_BATSMAN_CSV_FILE_PATH,IPL_BOWLER_CSV_FILE_PATH);
+            String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.BEST_BATTING_BOWLING_AVERAGE);
+            IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
+            Assert.assertEquals("Krishnappa Gowtham", censusCSV[0].player);
+        } catch (StatAnalyzerException e) {
+            e.printStackTrace();
+        }
+    }
 }
