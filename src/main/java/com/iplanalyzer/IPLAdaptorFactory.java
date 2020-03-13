@@ -4,12 +4,11 @@ import java.util.Map;
 
 public class IPLAdaptorFactory {
 
-    public <E> Map<String, IPLDTO> getIPLAdaptor(IPLAnalyzer.Stat stat, String... csvFilePath) {
-        if (stat.equals(IPLAnalyzer.Stat.BATSMAN))
+    public <E> Map<String, IPLDTO> getIPLAdaptor(IPLAnalyzer.Statistics statistics, String... csvFilePath) {
+        if (statistics.equals(IPLAnalyzer.Statistics.BATSMAN))
             return new IPLBatsmanLoader().loadIPLData(csvFilePath);
-        if (stat.equals(IPLAnalyzer.Stat.BOWLER))
+        if (statistics.equals(IPLAnalyzer.Statistics.BOWLER))
             return new IPLBowlerLoader().loadIPLData(csvFilePath);
-        else
-            throw new StatAnalyzerException("Invalid stat type", StatAnalyzerException.ExceptionType.INVALID_STAT_TYPE);
+        throw new StatisticsAnalyzerException("Invalid stat type", StatisticsAnalyzerException.ExceptionType.INVALID_STATISTIC_TYPE);
     }
 }

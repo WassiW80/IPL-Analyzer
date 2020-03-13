@@ -1,7 +1,7 @@
 package com.iplanalyzer;
 
-import census.CSVBuilderFactory;
-import census.ICSVBuilder;
+import com.csvparser.CSVBuilderFactory;
+import com.csvparser.ICSVBuilder;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -21,21 +21,21 @@ public class IPLBatsmanLoader extends IPLAdaptor {
         return iplMap;
     }
 
-    private Map<String, IPLDTO> loadIPLData(Map<String, IPLDTO> censusCSVMap, String csvFilePath) {
+    private Map<String, IPLDTO> loadIPLData(Map<String, IPLDTO> ipldtoMap, String csvFilePath) {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
             ICSVBuilder csvBuilder = CSVBuilderFactory.createCSVBuilder();
-            Iterator<IPLBowlerCSV> censusCSVIterator = csvBuilder.getCSVFileIterator(reader, IPLBowlerCSV.class);
-            Iterable<IPLBowlerCSV> csvIterable = () -> censusCSVIterator;
-            StreamSupport.stream(csvIterable.spliterator(), false).filter(stat -> censusCSVMap.get(stat.player) != null)
+            Iterator<IPLBowlerCSV> csvIterator = csvBuilder.getCSVFileIterator(reader, IPLBowlerCSV.class);
+            Iterable<IPLBowlerCSV> csvIterable = () -> csvIterator;
+            StreamSupport.stream(csvIterable.spliterator(), false).filter(stat -> ipldtoMap.get(stat.player) != null)
                     .forEach(stat -> {
-                        censusCSVMap.get(stat.player).bowlerAverage = stat.average;
-                        censusCSVMap.get(stat.player).allWicket=stat.wicket;
+                        ipldtoMap.get(stat.player).bowlerAverage = stat.average;
+                        ipldtoMap.get(stat.player).allWicket = stat.wicket;
                     });
 
-            return censusCSVMap;
+            return ipldtoMap;
         } catch (IOException e) {
-            throw new StatAnalyzerException(e.getMessage(),
-                    StatAnalyzerException.ExceptionType.STAT_FILE_PROBLEM);
+            throw new StatisticsAnalyzerException(e.getMessage(),
+                    StatisticsAnalyzerException.ExceptionType.STATISTIC_FILE_PROBLEM);
         }
     }
 }

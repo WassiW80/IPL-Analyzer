@@ -1,7 +1,8 @@
 package com.iplanalyzer;
 
-import census.CSVBuilderFactory;
-import census.ICSVBuilder;
+import com.csvparser.CSVBuilderException;
+import com.csvparser.CSVBuilderFactory;
+import com.csvparser.ICSVBuilder;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -16,7 +17,7 @@ public abstract class IPLAdaptor {
     public abstract Map<String, IPLDTO> loadIPLData(String... csvFilePath);
 
     public static <E> Map<String, IPLDTO> loadIPLData(Class<E> iplClass, String csvFilePath) {
-        Map<String, IPLDTO> statMap = new HashMap<>();
+        Map<String, IPLDTO> statisticMap = new HashMap<>();
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath))) {
             ICSVBuilder icsvBuilder = CSVBuilderFactory.createCSVBuilder();
             Iterator<E> csvIterator = icsvBuilder.getCSVFileIterator(reader, iplClass);
@@ -24,15 +25,17 @@ public abstract class IPLAdaptor {
             if (iplClass.getName() == "com.iplanalyzer.IPLBatsmanCSV") {
                 StreamSupport.stream(csvIterable.spliterator(), false).
                         map(IPLBatsmanCSV.class::cast).
-                        forEach(csvStat -> statMap.put(csvStat.player, new IPLDTO(csvStat)));
+                        forEach(csvStatistic -> statisticMap.put(csvStatistic.player, new IPLDTO(csvStatistic)));
             } else if (iplClass.getName() == "com.iplanalyzer.IPLBowlerCSV") {
                 StreamSupport.stream(csvIterable.spliterator(), false).
                         map(IPLBowlerCSV.class::cast).
-                        forEach(csvStat -> statMap.put(csvStat.player, new IPLDTO(csvStat)));
+                        forEach(csvStatistic -> statisticMap.put(csvStatistic.player, new IPLDTO(csvStatistic)));
             }
-            return statMap;
-        } catch (IOException e) {
-            throw new StatAnalyzerException(e.getMessage(), StatAnalyzerException.ExceptionType.STAT_FILE_PROBLEM);
+            return statisticMap;
+        } catch (IOException ioException) {
+            throw new StatisticsAnalyzerException(ioException.getMessage(), StatisticsAnalyzerException.ExceptionType.STATISTIC_FILE_PROBLEM);
+        } catch (RuntimeException runtimeException) {
+            throw new CSVBuilderException(runtimeException.getMessage(), CSVBuilderException.ExceptionType.ERROR_CAPTURING_CSV_HEADER);
         }
     }
 }
