@@ -27,7 +27,10 @@ public class IPLBatsmanLoader extends IPLAdaptor {
             Iterator<IPLBowlerCSV> censusCSVIterator = csvBuilder.getCSVFileIterator(reader, IPLBowlerCSV.class);
             Iterable<IPLBowlerCSV> csvIterable = () -> censusCSVIterator;
             StreamSupport.stream(csvIterable.spliterator(), false).filter(stat -> censusCSVMap.get(stat.player) != null)
-                    .forEach(stat -> censusCSVMap.get(stat.player).bowlerAverage = stat.average);
+                    .forEach(stat -> {
+                        censusCSVMap.get(stat.player).bowlerAverage = stat.average;
+                        censusCSVMap.get(stat.player).allWicket=stat.wicket;
+                    });
 
             return censusCSVMap;
         } catch (IOException e) {

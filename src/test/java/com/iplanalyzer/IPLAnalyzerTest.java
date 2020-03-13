@@ -220,4 +220,16 @@ public class IPLAnalyzerTest {
             e.printStackTrace();
         }
     }
+    @Test
+    public void givenIPLBowler_WhenSortedOnAllRounder_ShouldReturnSortedData() {
+        try {
+            IPLAnalyzer iplAnalyzer = new IPLAnalyzer();
+            iplAnalyzer.loadIPLData(IPLAnalyzer.Stat.BATSMAN,IPL_BATSMAN_CSV_FILE_PATH,IPL_BOWLER_CSV_FILE_PATH);
+            String sortedData = iplAnalyzer.getStatWiseSortedData(SortField.ALL_ROUNDER);
+            IPLDTO[] censusCSV = new Gson().fromJson(sortedData, IPLDTO[].class);
+            Assert.assertEquals("Hardik Pandya", censusCSV[0].player);
+        } catch (StatAnalyzerException e) {
+            e.printStackTrace();
+        }
+    }
 }
